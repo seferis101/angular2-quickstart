@@ -15,7 +15,6 @@
         'app':                        { main: 'main.js',  defaultExtension: 'js' },
         'rxjs':                       { defaultExtension: 'js' },
         'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
-        '@angular/router': { main: 'index.js', defaultExtension: 'js' } // ADDED AS FIX, according to: https://stackoverflow.com/questions/38019436/404-router-umd-js-not-found-angular-2
     };
     var ngPackageNames = [
         'common',
@@ -25,7 +24,7 @@
         'http',
         'platform-browser',
         'platform-browser-dynamic',
-        // 'router', // REMOVED AS FIX, according to: https://stackoverflow.com/questions/38019436/404-router-umd-js-not-found-angular-2
+        'router',
         'router-deprecated',
         'upgrade',
     ];
@@ -35,7 +34,6 @@
     }
     // Bundled (~40 requests):
     function packUmd(pkgName) {
-        // FIXED: REMOVED '/' at beginning of '/bundles/'
         packages['@angular/'+pkgName] = { main: 'bundles/' + pkgName + '.umd.js', defaultExtension: 'js' };
     }
     // Most environments should use UMD; some (Karma) need the individual index files
