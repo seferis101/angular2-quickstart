@@ -7,7 +7,7 @@ const routes: RouterConfig = [
     {
         path: '',
         redirectTo: 'dashboard',
-        terminal: true
+        pathMatch: 'full'
     },
     {
         path: 'heroes',

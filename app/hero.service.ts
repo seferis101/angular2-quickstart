@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HEROES} from './mock-heroes';
 import {Hero} from './hero';
-import {resolve} from 'url';
 
 @Injectable()
 export class HeroService {
@@ -13,5 +12,9 @@ export class HeroService {
         return new Promise<Hero[]>(resolve =>
             setTimeout(() => resolve(HEROES), 3000) // wait 3 seconds
         );
+    }
+
+    getHero(id: number): Promise<Hero> {
+        return this.getHeroes().then(heroes => heroes.filter(hero => hero.id === id)[0]);
     }
 }
