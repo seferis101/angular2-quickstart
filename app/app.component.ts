@@ -8,9 +8,7 @@ import {HeroService} from './hero.service';
     templateUrl: 'app/app.component.html',
     styleUrls: ['app/app.component.css'],
     directives: [ROUTER_DIRECTIVES],
-    providers: [
-        HeroService
-    ]
+    providers: [HeroService],
 })
 export class AppComponent {
     title: string = 'Tour of Heroes';
