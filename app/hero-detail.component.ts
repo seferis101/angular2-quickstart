@@ -1,8 +1,8 @@
-import {Component, Input, OnInit, OnDestroy} from '@angular/core';
-import {Hero} from './hero';
-import {HeroService} from './hero.service';
+import {Component, Input, Output, EventEmitter, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
+import {HeroService} from './hero.service';
+import {Hero} from './hero';
 
 @Component({
     selector: 'my-hero-detail',
@@ -10,16 +10,26 @@ import {Subscription} from 'rxjs/Rx';
     styleUrls: ['app/hero-detail.component.css'],
 })
 export class HeroDetailComponent implements OnInit, OnDestroy {
-    private hero: Hero;
+    @Input() hero: Hero;
+    @Output() close = new EventEmitter();
+
+    error: any;
+    navigated = false; // true if navigated here
     private sub: Subscription;
 
     constructor(private heroService: HeroService, private route: ActivatedRoute) { }
 
     ngOnInit(): any {
         this.sub = this.route.params.subscribe(params => {
-            let id = +params['id'];
-            this.heroService.getHero(id)
-                .then(hero => this.hero = hero);
+            if (params['id'] !== undefined) { // edit existing hero
+                let id = +params['id'];
+                this.navigated = true;
+                this.heroService.getHero(id)
+                    .then(hero => this.hero = hero);
+            } else { // create new hero
+                this.navigated = false;
+                this.hero = new Hero();
+            }
         });
     }
 
@@ -27,7 +37,20 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
         this.sub.unsubscribe();
     }
 
-    goBack() {
-        window.history.back();
+    goBack(savedHero: Hero = null) {
+        this.close.emit(savedHero);
+        if (this.navigated) {
+            window.history.back();
+        }
+    }
+    
+    save() {
+        this.heroService
+            .save(this.hero)
+            .then(hero => {
+                this.hero = hero; // saved hero, w/ id if new
+                this.goBack(hero);
+            })
+            .catch(error => this.error = error); // TODO: Display error message
     }
 }
