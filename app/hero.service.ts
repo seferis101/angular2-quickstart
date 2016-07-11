@@ -41,7 +41,7 @@ export class HeroService {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
-        let url = '${this.heroesUrl}/${hero.id}';
+        let url = `${this.heroesUrl}/${hero.id}`;
 
         return this.http
             .delete(url, headers)

@@ -11,11 +11,10 @@ import {Router} from '@angular/router';
     directives: [HeroDetailComponent],
 })
 export class HeroesComponent implements OnInit {
-    title = 'Tour of Heroes';
     heroes: Hero[];
     selectedHero: Hero;
     error: any;
-    addingHero: boolean;
+    addingHero: boolean = false;
 
     constructor(private heroService: HeroService, private router: Router) { }
 
@@ -24,11 +23,15 @@ export class HeroesComponent implements OnInit {
     }
 
     getHeroes(): void {
-        this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+        this.heroService
+            .getHeroes()
+            .then(heroes => this.heroes = heroes)
+            .catch(error => this.error = error);
     }
 
     onSelect(hero: Hero): void {
         this.selectedHero = hero;
+        this.addingHero = false;
     }
 
     gotoDetail() {
